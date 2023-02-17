@@ -1,0 +1,29 @@
+spring:
+    #  数据库配置
+    datasource:
+        username: root
+#        password: Gqb2275237.
+        password: 123456
+        url: jdbc:mysql://124.222.27.22:3306/qingbing?useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        #   下面的内容是额外配置，如果不需要直接删除就行 不用配
+        #   换阿里的druid连接池
+        type: com.alibaba.druid.pool.DruidDataSource
+        #    配置druid
+        druid:
+            max-active: 20
+            initial-size: 5
+            min-idle: 10
+            max-wait: 60000
+
+    #redis
+    redis:
+        host: 124.222.27.22
+        port: 6379
+#配置日志
+mybatis-plus:
+    configuration:
+        log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+server:
+    port: 8088
