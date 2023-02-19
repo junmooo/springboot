@@ -15,7 +15,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         // 对所有访问路径，都通过MyInterceptor类型的拦截器进行拦截
         registry.addInterceptor(new InterceptorDemo()).addPathPatterns("/**")
-                .excludePathPatterns("/", "*/auth/login","*/interview/*","*/file/*");
+                .excludePathPatterns("/", "/auth/login", "/auth/register", "/auth/getName");
         //放行登录页，登陆操作，静态资源
     }
 }

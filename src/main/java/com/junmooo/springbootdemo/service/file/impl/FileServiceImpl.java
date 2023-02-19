@@ -7,6 +7,7 @@ import com.junmooo.springbootdemo.mapper.file.FileMapper;
 import com.junmooo.springbootdemo.service.file.FileService;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,8 +20,10 @@ import java.util.UUID;
 @Service
 public class FileServiceImpl implements FileService {
 
-    private static final String DIRPATH = "/home/ubuntu/files";
-    private static final String BASKET = "http://124.222.27.22/imgs/";
+    @Value("${env.dir-path}")
+    private String DIRPATH;
+    @Value("${env.basket}")
+    private String BASKET;
 
     private static final String[] SUFFIXES = {"jpg", "jpeg", "png", "gif"};
 

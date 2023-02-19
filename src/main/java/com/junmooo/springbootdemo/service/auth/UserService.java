@@ -14,7 +14,7 @@ public interface UserService {
 
     Operator addOperator(Operator operator) throws Exception;
 
-    Operator getOperatorByOpername(Operator operator) throws Exception;
+    Operator getOperatorByOpername(String operName) throws Exception;
 
     List<Operator> getOperList(Operator operator) throws Exception;
 

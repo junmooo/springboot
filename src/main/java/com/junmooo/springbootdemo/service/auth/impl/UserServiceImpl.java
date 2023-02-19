@@ -43,12 +43,12 @@ public class UserServiceImpl implements UserService {
         throw new Exception();
     }
 
-    public Operator getOperatorByOpername(Operator operator) throws Exception {
+    @Override
+    public Operator getOperatorByOpername(String operName) throws Exception {
         QueryWrapper<Operator> wrapper = new QueryWrapper<>();
-        wrapper.eq("OPER_NAME", operator.getOperName());
+        wrapper.eq("OPER_NAME", operName);
         try {
-            Operator retOper = operatorMapper.selectOne(wrapper);
-            return retOper;
+            return operatorMapper.selectOne(wrapper);
         }catch (Exception e){
             throw new RuntimeException();
         }
@@ -63,12 +63,12 @@ public class UserServiceImpl implements UserService {
         String deleteFlag = operator.getDeleteFlag();
         String phoneNo = operator.getPhoneNo();
         String remark = operator.getRemark();
-        assmbleNotNull(wrapper,"OPER_EMAIL",operEmail);
-        assmbleNotNull(wrapper,"OPER_NAME",operName);
-        assmbleNotNull(wrapper,"OPER_STATUS",operStatus);
-        assmbleNotNull(wrapper,"DELETE_FLAG",deleteFlag);
-        assmbleNotNull(wrapper,"PHONE_NO",phoneNo);
-        assmbleNotNull(wrapper,"remark",remark);
+        assembleNotNull(wrapper,"OPER_EMAIL",operEmail);
+        assembleNotNull(wrapper,"OPER_NAME",operName);
+        assembleNotNull(wrapper,"OPER_STATUS",operStatus);
+        assembleNotNull(wrapper,"DELETE_FLAG",deleteFlag);
+        assembleNotNull(wrapper,"PHONE_NO",phoneNo);
+        assembleNotNull(wrapper,"remark",remark);
         List<Operator> operators = operatorMapper.selectList(wrapper);
         return operators;
     }
@@ -81,7 +81,7 @@ public class UserServiceImpl implements UserService {
         return i;
     }
 
-    private QueryWrapper assmbleNotNull(QueryWrapper wrapper, String eqKey, String eqVal){
+    private QueryWrapper assembleNotNull(QueryWrapper wrapper, String eqKey, String eqVal){
         if (StringUtils.isNotEmpty(eqVal)){
             wrapper.eq(eqKey, eqVal);
         }

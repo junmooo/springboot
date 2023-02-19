@@ -4,7 +4,6 @@ import com.junmooo.springbootdemo.common.constant.ErrorCode;
 import com.junmooo.springbootdemo.entity.vo.CommonResponse;
 import com.junmooo.springbootdemo.utils.RedisCacheUtil;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
@@ -37,6 +36,7 @@ public class InterceptorDemo implements HandlerInterceptor {
 
         if (StringUtils.isEmpty(s)) {
             response.setContentType("application/json;charset=utf-8");
+            response.setStatus(403);
             PrintWriter out = response.getWriter();
             out.write(CommonResponse.fail(ErrorCode.WRONGTOKEN, "token 失效").toJSONString());
             out.close();

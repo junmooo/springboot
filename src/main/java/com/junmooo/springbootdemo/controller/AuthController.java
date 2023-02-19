@@ -5,7 +5,6 @@ import com.junmooo.springbootdemo.common.constant.ErrorCode;
 import com.junmooo.springbootdemo.common.exception.AdminException;
 import com.junmooo.springbootdemo.entity.auth.Operator;
 import com.junmooo.springbootdemo.entity.auth.Resource;
-import com.junmooo.springbootdemo.entity.auth.ResourceWrapper;
 import com.junmooo.springbootdemo.entity.auth.Role;
 import com.junmooo.springbootdemo.entity.token.OperToken;
 import com.junmooo.springbootdemo.entity.vo.CommonResponse;
@@ -40,7 +39,7 @@ public class AuthController {
     @PostMapping("login")
     public JSONObject login(@RequestBody Operator operator) {
         try {
-            Operator retOperator = userService.getOperatorByOpername(operator);
+            Operator retOperator = userService.getOperatorByOpername(operator.getOperName());
 
             if (retOperator == null) {
                 return CommonResponse.fail(ErrorCode.LOGINFAIL, "用户名或密码错误");
@@ -78,13 +77,20 @@ public class AuthController {
         }
     }
 
+    @GetMapping("getName")
+    public JSONObject getName(@RequestParam String operName) {
+        try {
+            return CommonResponse.success(userService.getOperatorByOpername(operName));
+        } catch (Exception e) {
+            return CommonResponse.fail(ErrorCode.SQLERR, "user insert err");
+        }
+    }
+
     @PostMapping("operList")
     public JSONObject operList(@RequestBody Operator operator) {
 
         try {
-            List<Operator> operators = userService.getOperList(operator);
-            JSONObject res = CommonResponse.success(operators);
-            return res;
+            return CommonResponse.success(userService.getOperList(operator));
         } catch (Exception e) {
             return CommonResponse.fail(ErrorCode.SQLERR, "user query err");
         }
@@ -93,9 +99,7 @@ public class AuthController {
     @PostMapping("resourceList")
     public JSONObject resourceList(@RequestBody Resource resource) {
         try {
-            List<Resource> resources = resourceService.getResourceList(resource);
-            JSONObject res = CommonResponse.success(resources);
-            return res;
+            return CommonResponse.success(resourceService.getResourceList(resource));
         } catch (Exception e) {
             return CommonResponse.fail(ErrorCode.SQLERR, "resource query err");
         }
@@ -104,9 +108,7 @@ public class AuthController {
     @PostMapping("allResources")
     public JSONObject allResources() {
         try {
-            List<ResourceWrapper> resources = resourceService.getAllResources();
-            JSONObject res = CommonResponse.success(resources);
-            return res;
+            return CommonResponse.success(resourceService.getAllResources());
         } catch (Exception e) {
             e.printStackTrace();
             return CommonResponse.fail(ErrorCode.SQLERR, "resource query err");
@@ -118,8 +120,7 @@ public class AuthController {
         try {
             resource.setTimeCreated(new Date().getTime());
             resource.setDeleteFlag("1");
-            int i = resourceService.addResource(resource);
-            return CommonResponse.success(i);
+            return CommonResponse.success(resourceService.addResource(resource));
         } catch (Exception e) {
             e.printStackTrace();
             return CommonResponse.fail(ErrorCode.SQLERR, "resource insert err");
@@ -131,8 +132,7 @@ public class AuthController {
         try {
             role.setTimeCreated(new Date().getTime());
             role.setDeleteFlag("1");
-            int i = roleService.addRole(role);
-            return CommonResponse.success(i);
+            return CommonResponse.success(roleService.addRole(role));
         } catch (Exception e) {
             e.printStackTrace();
             return CommonResponse.fail(ErrorCode.SQLERR, "Role insert err");
@@ -144,8 +144,7 @@ public class AuthController {
     public JSONObject updateRole(@RequestBody Role role) {
         try {
             role.setTimeUpdated(new Date().getTime());
-            int i = roleService.updateRole(role);
-            return CommonResponse.success(i);
+            return CommonResponse.success(roleService.updateRole(role));
         } catch (Exception e) {
             e.printStackTrace();
             return CommonResponse.fail(ErrorCode.SQLERR, "Role update err");
@@ -155,8 +154,7 @@ public class AuthController {
     @PostMapping("getRoles")
     public JSONObject getRoles(@RequestBody Role role) {
         try {
-            List<Role> roles = roleService.getRoles(role);
-            return CommonResponse.success(roles);
+            return CommonResponse.success(roleService.getRoles(role));
         } catch (Exception e) {
             e.printStackTrace();
             return CommonResponse.fail(ErrorCode.SQLERR, "Role update err");
@@ -168,7 +166,7 @@ public class AuthController {
         try {
             int i = userService.delOper(operId);
             if (i == 1) {
-                return CommonResponse.success(null);
+                return CommonResponse.success(i);
             }
             return CommonResponse.fail(ErrorCode.SQLERR, "del fail");
 

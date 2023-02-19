@@ -29,5 +29,9 @@ mybatis-plus:
     configuration:
         log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
+#自定义变量
+env:
+    dir-path: "/home/ubuntu/files/imgs/"
+    basket: "http://124.222.27.22/imgs/"
 server:
     port: 8088

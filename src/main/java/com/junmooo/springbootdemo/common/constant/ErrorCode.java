@@ -8,5 +8,6 @@ public class ErrorCode {
     public static final int WRONGTOKEN = 5;
     public static final int SYSERR = 6;
     public static final int PARAMERR = 7;
+    public static final int BUSINESSERR = 8;
 
 }
