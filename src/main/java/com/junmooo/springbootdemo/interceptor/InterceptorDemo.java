@@ -43,7 +43,7 @@ public class InterceptorDemo implements HandlerInterceptor {
             response.flushBuffer();
             return false;
         }
-        opsForValue.set(token, "1", 10, TimeUnit.MINUTES);
+        opsForValue.set(token, "1", 60, TimeUnit.MINUTES);
         return true;//放行
     }
 

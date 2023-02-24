@@ -12,7 +12,7 @@ import java.sql.Date;
 @Builder
 @TableName("CAUTH_OPERATOR_INFO")
 public class Operator {
-    @TableId(value = "OPER_ID",type = IdType.AUTO)
+    @TableId(value = "OPER_ID")
     private String operId;
     private String operPwd;
     private String operName;

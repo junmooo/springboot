@@ -2,8 +2,8 @@ spring:
     #  数据库配置
     datasource:
         username: root
-#        password: Gqb2275237.
-        password: 123456
+        password: Gqb2275237.
+#        password: 123456
         url: jdbc:mysql://124.222.27.22:3306/qingbing?useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8
         driver-class-name: com.mysql.cj.jdbc.Driver
         #   下面的内容是额外配置，如果不需要直接删除就行 不用配
@@ -23,7 +23,8 @@ spring:
     #redis
     redis:
         host: 124.222.27.22
-        port: 6379
+        port: 6371
+        password: 2275237
 #配置日志
 mybatis-plus:
     configuration:
@@ -31,7 +32,8 @@ mybatis-plus:
 
 #自定义变量
 env:
-    dir-path: "/home/ubuntu/files/imgs/"
+#    dir-path: "/Users/junmooo/files/"
+    dir-path: "/root/home/files/imgs/"
     basket: "http://124.222.27.22/imgs/"
 server:
     port: 8088

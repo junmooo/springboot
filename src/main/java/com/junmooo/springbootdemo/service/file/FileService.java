@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 public interface FileService {
-    FileEntity save(MultipartFile uploadFile) throws IOException;
+    FileEntity save(MultipartFile uploadFile, String operId) throws IOException;
 
-    JSONArray saveAll(MultipartFile[] files) throws IOException;
+    JSONArray saveAll(MultipartFile[] files, String token) throws IOException;
 }

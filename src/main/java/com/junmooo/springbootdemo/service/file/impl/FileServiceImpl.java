@@ -32,7 +32,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     @Transactional
-    public FileEntity save(MultipartFile uploadFile) throws IOException {
+    public FileEntity save(MultipartFile uploadFile, String operId) throws IOException {
         File dir = new File(DIRPATH);
         if (!dir.isDirectory()) {//文件目录不存在，就创建一个
             FileUtils.forceMkdir(dir);
@@ -47,7 +47,16 @@ public class FileServiceImpl implements FileService {
         String url = BASKET + filename;
         //2，实现上传
         FileUtils.copyInputStreamToFile(uploadFile.getInputStream(), new File(dir.getAbsolutePath() + "/" + filename));
-        FileEntity fileEntity = FileEntity.builder().id(UUID.randomUUID().toString()).url(url).originalFileName(originalFilename).deleteFlag("00").fileName(filename).isImage(isImage).timeCreated(System.currentTimeMillis()).build();
+        FileEntity fileEntity = FileEntity.builder()
+                .id(id)
+                .url(url)
+                .originalFileName(originalFilename)
+                .deleteFlag("00")
+                .fileName(filename)
+                .isImage(isImage)
+                .timeCreated(System.currentTimeMillis())
+                .uploaderId(operId)
+                .build();
 
         int i = fileMapper.insert(fileEntity);
         if (i == 1) {
@@ -58,11 +67,11 @@ public class FileServiceImpl implements FileService {
 
     @Override
     @Transactional
-    public JSONArray saveAll(MultipartFile[] files) throws IOException {
+    public JSONArray saveAll(MultipartFile[] files, String operId) throws IOException {
         JSONArray res = new JSONArray();
         for (int i = 0; i < files.length; i++) {
             //2，实现上传
-            res.add(save(files[i]));
+            res.add(save(files[i], operId));
         }
         return res;
     }

@@ -17,6 +17,7 @@ public class FileEntity {
     private String remark;
     private String deleteFlag;
     private String isImage;
+    private String uploaderId;
     private Long timeCreated;
 
 }

@@ -107,7 +107,7 @@ public class UserServiceImpl implements UserService {
 
     public Operator addOperator(Operator operator) throws Exception {
         operator.setTimeCreated(new Date(Calendar.getInstance().getTimeInMillis()));
-//        operator.setOperId(UUID.randomUUID().toString());
+        operator.setOperId(UUID.randomUUID().toString());
         int insert = operatorMapper.insert(operator);
         if (insert == 1) {
             return operator;

@@ -51,7 +51,7 @@ public class AuthController {
                 return CommonResponse.fail(ErrorCode.LOGINFAIL, "用户名或密码错误");
             }
 
-            String token = TokenUtils.generateToken(new OperToken(operator.getOperId(), operator.getOperName(), operator.getOperEmail()), 60);
+            String token = TokenUtils.generateToken(new OperToken(retOperator.getOperId(), retOperator.getOperName(), retOperator.getOperEmail()), 60);
             ValueOperations<String, String> opsForValue = stringRedisTemplate.opsForValue();
             opsForValue.set(token, "1", 10, TimeUnit.MINUTES);
             JSONObject res = new JSONObject();

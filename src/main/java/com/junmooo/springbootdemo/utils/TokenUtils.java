@@ -8,6 +8,7 @@ import org.jose4j.jwt.JwtClaims;
 import org.jose4j.jwt.consumer.JwtConsumer;
 import org.jose4j.jwt.consumer.JwtConsumerBuilder;
 import org.jose4j.keys.HmacKey;
+import org.jose4j.lang.JoseException;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
@@ -25,13 +26,13 @@ import java.security.Key;
  */
 
 public class TokenUtils {
-    public static String generateToken(OperToken userToken, int expire) throws Exception {
+    public static String generateToken(OperToken userToken, int expire) throws JoseException {
         JwtClaims claims = new JwtClaims();
         claims.setSubject(userToken.getOperName());
         claims.setClaim("OPER_ID", userToken.getOperId());
         claims.setClaim("OPER_NAME", userToken.getOperName());
         claims.setClaim("OPER_EMAIL", userToken.getOperEmail());
-        claims.setExpirationTimeMinutesInTheFuture(expire == 0 ? 60 : expire);
+        claims.setExpirationTimeMinutesInTheFuture(expire == 0 ? 60 * 24 : expire);
 
         Key key = new HmacKey("junmooo".getBytes(StandardCharsets.UTF_8));
 
@@ -71,7 +72,7 @@ public class TokenUtils {
         JwtClaims processedClaims = jwtConsumer.processToClaims(token);
 
         return new OperToken(
-                processedClaims.getSubject(),
+                processedClaims.getClaimValue("OPER_ID").toString(),
                 processedClaims.getClaimValue("OPER_NAME").toString(),
                 processedClaims.getClaimValue("OPER_EMAIL").toString()
         );
@@ -79,9 +80,8 @@ public class TokenUtils {
 
     public static void main(String[] agars) throws Exception {
         OperToken userToken = new OperToken("1", "junmo", "超级管理员名称");
-        String token = generateToken(userToken, 0);
-        System.out.println(token);
-        OperToken infoFromToken = getInfoFromToken(token);
+        String token = generateToken(userToken, 60);
+        OperToken infoFromToken = getInfoFromToken("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWEiLCJPUEVSX0lEIjoiNDkyNjZlYTQtZTFiNy00ZTNiLWI1ODAtNjkxOTM3NDliYjhlIiwiT1BFUl9OQU1FIjoiYWFhIiwiT1BFUl9FTUFJTCI6IjEyM0AxMTEuY29tIiwiZXhwIjoxNjc2OTg2MDQ1fQ.avZr4ii8IigY7pLS8MXqR_qboCt4H8XtwLAMo4rJyUo");
         System.out.println(infoFromToken);
     }
 
