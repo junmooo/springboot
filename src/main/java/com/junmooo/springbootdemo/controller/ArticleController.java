@@ -3,6 +3,7 @@ package com.junmooo.springbootdemo.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.junmooo.springbootdemo.common.constant.ErrorCode;
 import com.junmooo.springbootdemo.entity.atical.Article;
+import com.junmooo.springbootdemo.entity.token.OperToken;
 import com.junmooo.springbootdemo.entity.vo.CommonResponse;
 import com.junmooo.springbootdemo.service.article.ArticleService;
 import com.junmooo.springbootdemo.service.file.FileService;
@@ -23,8 +24,9 @@ public class ArticleController {
     //单个文件的上传
     @PostMapping("/save")
     public JSONObject save(@RequestBody Article article, HttpServletRequest request) {
+        OperToken operToken = (OperToken) request.getAttribute("operToken");
         try {
-            return CommonResponse.success(articleService.save(article, TokenUtils.getInfoFromToken(request.getHeader("token"))));
+            return CommonResponse.success(articleService.save(article, operToken));
         } catch (IOException e) {
             e.printStackTrace();
         } catch (Exception e) {

@@ -1,9 +1,12 @@
 package com.junmooo.springbootdemo.interceptor;
 
 import com.junmooo.springbootdemo.common.constant.ErrorCode;
+import com.junmooo.springbootdemo.entity.token.OperToken;
 import com.junmooo.springbootdemo.entity.vo.CommonResponse;
 import com.junmooo.springbootdemo.utils.RedisCacheUtil;
+import com.junmooo.springbootdemo.utils.TokenUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.jose4j.jwt.consumer.InvalidJwtException;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Component;
@@ -20,6 +23,16 @@ public class InterceptorDemo implements HandlerInterceptor {
 
     private final StringRedisTemplate stringRedisTemplate = RedisCacheUtil.stringRedis;
 
+    private boolean resp403(HttpServletResponse response) throws Exception{
+        response.setContentType("application/json;charset=utf-8");
+        response.setStatus(403);
+        PrintWriter out = response.getWriter();
+        out.write(CommonResponse.fail(ErrorCode.WRONGTOKEN, "token 失效").toJSONString());
+        out.close();
+        response.flushBuffer();
+        return false;
+    }
+
     /**
      * handler 对应@RequestMapping对应的controller对象
      */
@@ -30,18 +43,17 @@ public class InterceptorDemo implements HandlerInterceptor {
 
         ValueOperations<String, String> opsForValue = stringRedisTemplate.opsForValue();
         String s = "";
+        try{
+            OperToken operToken = TokenUtils.getInfoFromToken(request.getHeader("token"));
+            request.setAttribute("operToken",operToken);
+        }catch (InvalidJwtException e){
+            return resp403(response);
+        }
         if (StringUtils.isNotEmpty(token)) {
             s = opsForValue.get(token);
         }
-
         if (StringUtils.isEmpty(s)) {
-            response.setContentType("application/json;charset=utf-8");
-            response.setStatus(403);
-            PrintWriter out = response.getWriter();
-            out.write(CommonResponse.fail(ErrorCode.WRONGTOKEN, "token 失效").toJSONString());
-            out.close();
-            response.flushBuffer();
-            return false;
+            return resp403(response);
         }
         opsForValue.set(token, "1", 60, TimeUnit.MINUTES);
         return true;//放行
