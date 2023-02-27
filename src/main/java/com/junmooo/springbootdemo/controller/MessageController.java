@@ -3,9 +3,9 @@ package com.junmooo.springbootdemo.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.junmooo.springbootdemo.common.constant.ErrorCode;
 import com.junmooo.springbootdemo.entity.message.Message;
-import com.junmooo.springbootdemo.entity.token.OperToken;
+import com.junmooo.springbootdemo.entity.token.UserToken;
 import com.junmooo.springbootdemo.entity.vo.CommonResponse;
-import com.junmooo.springbootdemo.service.interview.MessageService;
+import com.junmooo.springbootdemo.service.message.MessageService;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,15 +25,15 @@ public class MessageController {
 
     @PostMapping("addOrUpdate")
     public JSONObject addOrUpdate(@RequestBody Message message, HttpServletRequest request) {
-        OperToken operToken = (OperToken) request.getAttribute("operToken");
+        UserToken userToken = (UserToken) request.getAttribute("userToken");
         try {
             int i;
             if (message.getId() != null) {
                 message.setUpdatedTime(System.currentTimeMillis());
                 i = messageService.update(message);
             } else {
-                message.setAuthorId(operToken.getOperId());
-                message.setAuthorName(operToken.getOperName());
+                message.setAuthorId(userToken.getId());
+                message.setAuthorName(userToken.getName());
                 message.setCreatedTime(System.currentTimeMillis());
                 i = messageService.add(message);
             }
@@ -51,8 +51,8 @@ public class MessageController {
     @PostMapping("query")
     public JSONObject query(@RequestBody Message message, HttpServletRequest request) {
         try {
-            OperToken operToken = (OperToken) request.getAttribute("operToken");
-            List messages = messageService.messages(message, operToken);
+            UserToken userToken = (UserToken) request.getAttribute("userToken");
+            List messages = messageService.messages(message, userToken);
             return CommonResponse.success(messages);
         } catch (Exception e) {
             e.printStackTrace();

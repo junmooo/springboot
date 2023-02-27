@@ -1,10 +1,10 @@
-package com.junmooo.springbootdemo.service.interview.impl;
+package com.junmooo.springbootdemo.service.message.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.junmooo.springbootdemo.entity.message.Message;
-import com.junmooo.springbootdemo.entity.token.OperToken;
+import com.junmooo.springbootdemo.entity.token.UserToken;
 import com.junmooo.springbootdemo.mapper.message.MessageMapper;
-import com.junmooo.springbootdemo.service.interview.MessageService;
+import com.junmooo.springbootdemo.service.message.MessageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +23,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public List messages(Message message, OperToken operToken) {
+    public List messages(Message message, UserToken userToken) {
         QueryWrapper wrapper = new QueryWrapper(message);
         return messageMapper.selectList(wrapper);
     }

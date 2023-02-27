@@ -3,7 +3,7 @@ package com.junmooo.springbootdemo.controller;
 import com.alibaba.fastjson.JSONObject;
 import com.junmooo.springbootdemo.common.constant.ErrorCode;
 import com.junmooo.springbootdemo.entity.atical.Article;
-import com.junmooo.springbootdemo.entity.token.OperToken;
+import com.junmooo.springbootdemo.entity.token.UserToken;
 import com.junmooo.springbootdemo.entity.vo.CommonResponse;
 import com.junmooo.springbootdemo.service.article.ArticleService;
 import com.junmooo.springbootdemo.service.file.FileService;
@@ -24,11 +24,9 @@ public class ArticleController {
     //单个文件的上传
     @PostMapping("/save")
     public JSONObject save(@RequestBody Article article, HttpServletRequest request) {
-        OperToken operToken = (OperToken) request.getAttribute("operToken");
+        UserToken userToken = (UserToken) request.getAttribute("userToken");
         try {
-            return CommonResponse.success(articleService.save(article, operToken));
-        } catch (IOException e) {
-            e.printStackTrace();
+            return CommonResponse.success(articleService.save(article, userToken));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -39,11 +37,21 @@ public class ArticleController {
     public JSONObject all() {
         try {
             return CommonResponse.success(articleService.all());
-        } catch (IOException e) {
-            e.printStackTrace();
         } catch (Exception e) {
             e.printStackTrace();
         }
         return CommonResponse.fail(ErrorCode.WRONGTOKEN, "save 失败");
+    }
+
+    @GetMapping("/del")
+    public JSONObject del(@RequestParam String id) {
+        try {
+            if (articleService.del(id) == 1) {
+                return CommonResponse.success("ok");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return CommonResponse.fail(ErrorCode.WRONGTOKEN, "del 失败");
     }
 }

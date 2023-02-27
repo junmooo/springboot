@@ -10,7 +10,7 @@ import com.junmooo.springbootdemo.entity.token.OperToken;
 import com.junmooo.springbootdemo.entity.vo.CommonResponse;
 import com.junmooo.springbootdemo.service.auth.ResourceService;
 import com.junmooo.springbootdemo.service.auth.RoleService;
-import com.junmooo.springbootdemo.service.auth.UserService;
+import com.junmooo.springbootdemo.service.auth.OperService;
 import com.junmooo.springbootdemo.utils.TokenUtils;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +19,13 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("auth")
 public class AuthController {
     @Autowired
-    UserService userService;
+    OperService operService;
 
     @Autowired
     ResourceService resourceService;
@@ -39,7 +38,7 @@ public class AuthController {
     @PostMapping("login")
     public JSONObject login(@RequestBody Operator operator) {
         try {
-            Operator retOperator = userService.getOperatorByOpername(operator.getOperName());
+            Operator retOperator = operService.getOperatorByOpername(operator.getOperName());
 
             if (retOperator == null) {
                 return CommonResponse.fail(ErrorCode.LOGINFAIL, "用户名或密码错误");
@@ -51,9 +50,9 @@ public class AuthController {
                 return CommonResponse.fail(ErrorCode.LOGINFAIL, "用户名或密码错误");
             }
 
-            String token = TokenUtils.generateToken(new OperToken(retOperator.getOperId(), retOperator.getOperName(), retOperator.getOperEmail()), 60);
+            String token = TokenUtils.generateOperToken(new OperToken(retOperator.getOperId(), retOperator.getOperName(), retOperator.getOperEmail()), 60);
             ValueOperations<String, String> opsForValue = stringRedisTemplate.opsForValue();
-            opsForValue.set(token, "1", 10, TimeUnit.MINUTES);
+            opsForValue.set(token, JSONObject.toJSONString(retOperator), 10, TimeUnit.MINUTES);
             JSONObject res = new JSONObject();
             res.put("token", token);
             return CommonResponse.success(res);
@@ -69,7 +68,7 @@ public class AuthController {
     @PostMapping("register")
     public JSONObject register(@RequestBody Operator operator) {
         try {
-            Operator operator1 = userService.addOperator(operator);
+            Operator operator1 = operService.addOperator(operator);
             JSONObject res = CommonResponse.success(operator1);
             return res;
         } catch (Exception e) {
@@ -80,7 +79,7 @@ public class AuthController {
     @GetMapping("getName")
     public JSONObject getName(@RequestParam String operName) {
         try {
-            return CommonResponse.success(userService.getOperatorByOpername(operName));
+            return CommonResponse.success(operService.getOperatorByOpername(operName));
         } catch (Exception e) {
             return CommonResponse.fail(ErrorCode.SQLERR, "user insert err");
         }
@@ -90,7 +89,7 @@ public class AuthController {
     public JSONObject operList(@RequestBody Operator operator) {
 
         try {
-            return CommonResponse.success(userService.getOperList(operator));
+            return CommonResponse.success(operService.getOperList(operator));
         } catch (Exception e) {
             return CommonResponse.fail(ErrorCode.SQLERR, "user query err");
         }
@@ -164,7 +163,7 @@ public class AuthController {
     @RequestMapping("delOper")
     public JSONObject delOper(@Param("operId") String operId) {
         try {
-            int i = userService.delOper(operId);
+            int i = operService.delOper(operId);
             if (i == 1) {
                 return CommonResponse.success(i);
             }
@@ -191,7 +190,7 @@ public class AuthController {
     @PostMapping("updateOper")
     public JSONObject updateOper(@RequestBody Operator operator) {
         try {
-            int i = userService.updateOpers(operator);
+            int i = operService.updateOpers(operator);
             if (i >= 0) {
                 return CommonResponse.success(null);
             }

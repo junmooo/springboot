@@ -26,13 +26,17 @@ public class FileController {
     //单个文件的上传
     @PostMapping("/upload")
     public JSONObject upload(MultipartFile file, HttpServletRequest request) {
+        if (file == null) {
+            return CommonResponse.fail(ErrorCode.PARAMERR, "文件不能为空");
+        }
+        String token = "";
         try {
-            return CommonResponse.success(fileService.save(file, TokenUtils.getInfoFromToken(request.getHeader("token")).getOperId()));
-        } catch (IOException e) {
+            token = TokenUtils.getInfoFromUserToken(request.getHeader("token")).getId();
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (JoseException e) {
-            e.printStackTrace();
-            return CommonResponse.fail(ErrorCode.WRONGTOKEN, "token 解析失败");
+        }
+        try {
+            return CommonResponse.success(fileService.save(file, token));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -42,17 +46,17 @@ public class FileController {
     //多个文件的上传
     @PostMapping("/uploads")
     public JSONObject uploads(MultipartFile[] files, HttpServletRequest request) {
-        //1，对文件数组做判空操作
         if (files == null || files.length < 1) {
             return CommonResponse.fail(ErrorCode.PARAMERR, "文件不能为空");
         }
+        String token = "";
         try {
-            return CommonResponse.success(fileService.saveAll(files, TokenUtils.getInfoFromToken(request.getHeader("token")).getOperId()));
-        } catch (IOException e) {
+            token = TokenUtils.getInfoFromUserToken(request.getHeader("token")).getId();
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (JoseException e) {
-            e.printStackTrace();
-            return CommonResponse.fail(ErrorCode.WRONGTOKEN, "token 解析失败");
+        }
+        try {
+            return CommonResponse.success(fileService.saveAll(files, token));
         } catch (Exception e) {
             e.printStackTrace();
         }

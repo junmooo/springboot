@@ -2,6 +2,7 @@ package com.junmooo.springbootdemo.utils;
 
 
 import com.junmooo.springbootdemo.entity.token.OperToken;
+import com.junmooo.springbootdemo.entity.token.UserToken;
 import org.jose4j.jws.AlgorithmIdentifiers;
 import org.jose4j.jws.JsonWebSignature;
 import org.jose4j.jwt.JwtClaims;
@@ -12,6 +13,7 @@ import org.jose4j.lang.JoseException;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Description:Token生成工具
@@ -26,15 +28,36 @@ import java.security.Key;
  */
 
 public class TokenUtils {
-    public static String generateToken(OperToken userToken, int expire) throws JoseException {
+    public static String generateOperToken(OperToken operToken, int expire) throws JoseException {
         JwtClaims claims = new JwtClaims();
-        claims.setSubject(userToken.getOperName());
-        claims.setClaim("OPER_ID", userToken.getOperId());
-        claims.setClaim("OPER_NAME", userToken.getOperName());
-        claims.setClaim("OPER_EMAIL", userToken.getOperEmail());
+        claims.setSubject(operToken.getOperName());
+        claims.setClaim("OPER_ID", operToken.getOperId());
+        claims.setClaim("OPER_NAME", operToken.getOperName());
+        claims.setClaim("OPER_EMAIL", operToken.getOperEmail());
         claims.setExpirationTimeMinutesInTheFuture(expire == 0 ? 60 * 24 : expire);
 
-        Key key = new HmacKey("junmooo".getBytes(StandardCharsets.UTF_8));
+        Key key = new HmacKey("ADMIN".getBytes(StandardCharsets.UTF_8));
+
+        JsonWebSignature jws = new JsonWebSignature();
+        jws.setPayload(claims.toJson());
+        jws.setAlgorithmHeaderValue(AlgorithmIdentifiers.HMAC_SHA256);
+        jws.setKey(key);
+        jws.setDoKeyValidation(false); // relaxes the key length requirement
+
+        //签名
+        return jws.getCompactSerialization();
+    }
+
+    public static String generateUserToken(UserToken userToken, int expire) throws JoseException {
+        JwtClaims claims = new JwtClaims();
+        claims.setSubject(userToken.getName());
+        claims.setClaim("ID", userToken.getId());
+        claims.setClaim("NAME", userToken.getName());
+        claims.setClaim("EMAIL", userToken.getEmail());
+        claims.setClaim("AVATAR", userToken.getAvatar());
+        claims.setExpirationTimeMinutesInTheFuture(expire == 0 ? 60 * 24 : expire);
+
+        Key key = new HmacKey("CLIENT".getBytes(StandardCharsets.UTF_8));
 
         JsonWebSignature jws = new JsonWebSignature();
         jws.setPayload(claims.toJson());
@@ -53,13 +76,13 @@ public class TokenUtils {
      * @return 解析token
      * @throws Exception 异常
      */
-    public static OperToken getInfoFromToken(String token) throws Exception {
+    public static OperToken getInfoFromOperToken(String token) throws Exception {
 
         if (token == null) {
             return null;
         }
 
-        Key key = new HmacKey("junmooo".getBytes(StandardCharsets.UTF_8));
+        Key key = new HmacKey("ADMIN".getBytes(StandardCharsets.UTF_8));
 
         JwtConsumer jwtConsumer = new JwtConsumerBuilder()
                 .setRequireExpirationTime()
@@ -78,12 +101,35 @@ public class TokenUtils {
         );
     }
 
-    public static void main(String[] agars) throws Exception {
-        OperToken userToken = new OperToken("1", "junmo", "超级管理员名称");
-        String token = generateToken(userToken, 60);
-        OperToken infoFromToken = getInfoFromToken("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYWEiLCJPUEVSX0lEIjoiNDkyNjZlYTQtZTFiNy00ZTNiLWI1ODAtNjkxOTM3NDliYjhlIiwiT1BFUl9OQU1FIjoiYWFhIiwiT1BFUl9FTUFJTCI6IjEyM0AxMTEuY29tIiwiZXhwIjoxNjc2OTg2MDQ1fQ.avZr4ii8IigY7pLS8MXqR_qboCt4H8XtwLAMo4rJyUo");
-        System.out.println(infoFromToken);
+    public static UserToken getInfoFromUserToken(String token) throws Exception {
+
+        if (token == null) {
+            return null;
+        }
+
+        Key key = new HmacKey("CLIENT".getBytes(StandardCharsets.UTF_8));
+
+        JwtConsumer jwtConsumer = new JwtConsumerBuilder()
+                .setRequireExpirationTime()
+                .setAllowedClockSkewInSeconds(30)
+                .setRequireSubject()
+                .setVerificationKey(key)
+                .setRelaxVerificationKeyValidation() // relaxes key length requirement
+                .build();
+
+        JwtClaims processedClaims = jwtConsumer.processToClaims(token);
+        UserToken userToken = UserToken.builder().id(processedClaims.getClaimValue("ID").toString())
+                .name(processedClaims.getClaimValue("NAME").toString())
+                .email(processedClaims.getClaimValue("EMAIL").toString())
+                .avatar(processedClaims.getClaimValue("AVATAR").toString())
+                .build();
+        return userToken;
     }
 
-
+    public static void main(String[] agars) throws Exception {
+//        OperToken userToken = new OperToken("1", "junmo", "超级管理员名称");
+//        String token = generateOperToken(userToken, 60);
+        UserToken infoFromToken = getInfoFromUserToken("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqdW5tb29vIiwiSUQiOiI0NDdmODM4Yy0yYzkwLTQ4NTMtOGVjMy0zMGJkN2E2OTk4YWMiLCJOQU1FIjoianVubW9vbyIsIkVNQUlMIjoicWluZ2JndW9AcGF5cGFsLmNvbSIsIkFWQVRBUiI6bnVsbCwiZXhwIjoxNjc3NDY1NDM1fQ.9bU3x3wpwhzVcww1YdQOmi7Xr75_S_6rrs9XUB9BjxU");
+        System.out.println(infoFromToken);
+    }
 }
