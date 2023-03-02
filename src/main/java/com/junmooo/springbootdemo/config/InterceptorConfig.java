@@ -26,7 +26,7 @@ public class InterceptorConfig implements WebMvcConfigurer {
         registry.addInterceptor(adminInterceptor).addPathPatterns("/auth/**")
                 .excludePathPatterns("/", "/auth/login", "/auth/register", "/auth/getName");
         //放行登录页，登陆操作，静态资源
-        registry.addInterceptor(clientInterceptor).addPathPatterns("/article/**", "/message/**","/hello/**");
+        registry.addInterceptor(clientInterceptor).addPathPatterns("/message/**");
 
     }
 }

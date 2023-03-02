@@ -8,6 +8,7 @@ import com.junmooo.springbootdemo.service.file.FileService;
 import com.junmooo.springbootdemo.utils.TokenUtils;
 import org.jose4j.lang.JoseException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +19,7 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("file")
+@CrossOrigin
 public class FileController {
 
     @Autowired

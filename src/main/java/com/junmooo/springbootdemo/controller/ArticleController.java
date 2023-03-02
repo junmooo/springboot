@@ -17,6 +17,7 @@ import java.io.IOException;
 
 @RestController
 @RequestMapping("article")
+@CrossOrigin(origins = "*")
 public class ArticleController {
     @Autowired
     private ArticleService articleService;
@@ -34,6 +35,7 @@ public class ArticleController {
     }
 
     @GetMapping("/all")
+    @CrossOrigin
     public JSONObject all() {
         try {
             return CommonResponse.success(articleService.all());

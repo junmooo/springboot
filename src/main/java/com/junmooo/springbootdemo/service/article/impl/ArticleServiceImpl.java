@@ -29,8 +29,8 @@ public class ArticleServiceImpl implements ArticleService {
             article.setId(UUID.randomUUID().toString());
             //软删除标志：00-已删除，01-未删除
             article.setDeleteFlag("01");
-            article.setAuthorId(author.getId());
-            article.setAuthorName(author.getName());
+//            article.setAuthorId(author.getId());
+//            article.setAuthorName(author.getName());
             article.setTimeCreated(System.currentTimeMillis());
             article.setType("00");
             if (articleMapper.insert(article) == 1) {
@@ -44,6 +44,7 @@ public class ArticleServiceImpl implements ArticleService {
     public List<Article> all() throws Exception {
         Article article = Article.builder().deleteFlag("01").build();
         QueryWrapper qw = new QueryWrapper(article);
+        qw.orderByDesc("TIME_CREATED");
         return articleMapper.selectList(qw);
     }
 

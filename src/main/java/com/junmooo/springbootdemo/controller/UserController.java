@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 
 @RestController
 @RequestMapping("user")
+@CrossOrigin(origins = "*")
 public class UserController {
     @Autowired
     UserService userService;
@@ -42,6 +43,7 @@ public class UserController {
             ValueOperations<String, String> opsForValue = stringRedisTemplate.opsForValue();
             opsForValue.set(token, JSONObject.toJSONString(retUser), 60, TimeUnit.MINUTES);
             JSONObject res = new JSONObject();
+            res.put("user", retUser);
             res.put("token", token);
             return CommonResponse.success(res);
         } catch (AdminException e) {
