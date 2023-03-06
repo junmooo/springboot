@@ -33,6 +33,9 @@ public class ClientInterceptor implements HandlerInterceptor {
      */
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        if("OPTIONS".equals(request.getMethod().toUpperCase())) {
+            return true;
+        }
         String token = request.getHeader("token");
         String s = "";
         try{
