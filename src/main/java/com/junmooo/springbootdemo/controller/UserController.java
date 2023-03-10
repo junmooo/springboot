@@ -7,10 +7,9 @@ import com.junmooo.springbootdemo.entity.token.UserToken;
 import com.junmooo.springbootdemo.entity.user.User;
 import com.junmooo.springbootdemo.entity.vo.CommonResponse;
 import com.junmooo.springbootdemo.service.user.UserService;
+import com.junmooo.springbootdemo.utils.RedisUtils;
 import com.junmooo.springbootdemo.utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.concurrent.TimeUnit;
@@ -21,9 +20,6 @@ import java.util.concurrent.TimeUnit;
 public class UserController {
     @Autowired
     UserService userService;
-
-    @Autowired
-    private StringRedisTemplate stringRedisTemplate;
 
     @PostMapping("login")
     public JSONObject login(@RequestBody User user) {
@@ -40,8 +36,7 @@ public class UserController {
                 return CommonResponse.fail(ErrorCode.LOGINFAIL, "用户名或密码错误");
             }
             String token = TokenUtils.generateUserToken(UserToken.builder().id(retUser.getId()).name(retUser.getName()).email(retUser.getEmail()).avatar(retUser.getAvatar()).build(), 60);
-            ValueOperations<String, String> opsForValue = stringRedisTemplate.opsForValue();
-            opsForValue.set(token, JSONObject.toJSONString(retUser), 60, TimeUnit.MINUTES);
+            RedisUtils.set(token, JSONObject.toJSONString(retUser), 60, TimeUnit.MINUTES);
             JSONObject res = new JSONObject();
             res.put("user", retUser);
             res.put("token", token);

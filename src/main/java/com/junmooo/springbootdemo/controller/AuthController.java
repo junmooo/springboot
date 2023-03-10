@@ -11,11 +11,10 @@ import com.junmooo.springbootdemo.entity.vo.CommonResponse;
 import com.junmooo.springbootdemo.service.auth.ResourceService;
 import com.junmooo.springbootdemo.service.auth.RoleService;
 import com.junmooo.springbootdemo.service.auth.OperService;
+import com.junmooo.springbootdemo.utils.RedisUtils;
 import com.junmooo.springbootdemo.utils.TokenUtils;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
@@ -32,8 +31,6 @@ public class AuthController {
 
     @Autowired
     RoleService roleService;
-    @Autowired
-    private StringRedisTemplate stringRedisTemplate;
 
     @PostMapping("login")
     public JSONObject login(@RequestBody Operator operator) {
@@ -51,8 +48,7 @@ public class AuthController {
             }
 
             String token = TokenUtils.generateOperToken(new OperToken(retOperator.getOperId(), retOperator.getOperName(), retOperator.getOperEmail()), 60);
-            ValueOperations<String, String> opsForValue = stringRedisTemplate.opsForValue();
-            opsForValue.set(token, JSONObject.toJSONString(retOperator), 10, TimeUnit.MINUTES);
+            RedisUtils.set(token, JSONObject.toJSONString(retOperator), 10, TimeUnit.MINUTES);
             JSONObject res = new JSONObject();
             res.put("token", token);
             return CommonResponse.success(res);
