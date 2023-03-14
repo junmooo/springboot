@@ -1,5 +1,6 @@
 package com.junmooo.springbootdemo.service.article;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.junmooo.springbootdemo.entity.atical.Article;
 import com.junmooo.springbootdemo.entity.atical.ArticleTree;
 import com.junmooo.springbootdemo.entity.token.UserToken;
@@ -18,4 +19,7 @@ public interface ArticleService {
     Article getArticleById(String id) throws Exception;
 
     ArticleTree getTreeByUid(String uid) throws Exception;
+
+    IPage<Article> search(String type, String regex, int curr, int size) throws Exception;
+
 }

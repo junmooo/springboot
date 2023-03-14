@@ -37,6 +37,7 @@ public class FileController {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        
         try {
             return CommonResponse.success(fileService.save(file, token));
         } catch (Exception e) {

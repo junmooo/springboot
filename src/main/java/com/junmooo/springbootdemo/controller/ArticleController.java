@@ -62,6 +62,17 @@ public class ArticleController {
         return CommonResponse.fail(ErrorCode.WRONGTOKEN, "save 失败");
     }
 
+    @GetMapping("/search")
+    @CrossOrigin
+    public JSONObject search(@RequestParam String type, @RequestParam String regex,@RequestParam int curr,@RequestParam int size) {
+        try {
+            return CommonResponse.success(articleService.search(type,regex,curr,size));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return CommonResponse.fail(ErrorCode.WRONGTOKEN, "save 失败");
+    }
+
     @GetMapping("/getArticleById")
     @CrossOrigin
     public JSONObject getArticleById(@RequestParam String id) {

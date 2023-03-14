@@ -1,6 +1,9 @@
 package com.junmooo.springbootdemo.service.article.impl;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.junmooo.springbootdemo.entity.atical.Article;
 import com.junmooo.springbootdemo.entity.atical.ArticleTree;
 import com.junmooo.springbootdemo.entity.token.UserToken;
@@ -58,6 +61,7 @@ public class ArticleServiceImpl implements ArticleService {
             article.setId(UUID.randomUUID().toString());
             if (StringUtils.isEmpty(article.getAuthorId())) article.setAuthorId(author.getId());
             if (StringUtils.isEmpty(article.getAuthorName())) article.setAuthorName(author.getName());
+            if (StringUtils.isEmpty(article.getAuthorAvatar())) article.setAuthorName(author.getAvatar());
             article.setTimeCreated(System.currentTimeMillis());
             article.setType("00");
             if (articleMapper.insert(article) == 1) {
@@ -91,6 +95,19 @@ public class ArticleServiceImpl implements ArticleService {
         QueryWrapper qw = new QueryWrapper();
         qw.eq("OWNER_ID",uid);
         return treeMapper.selectOne(qw);
+    }
+
+    @Override
+    public IPage<Article> search(String type, String regex,int curr,int size) throws Exception {
+        IPage<Article> page = new Page<>(curr,size);
+        QueryWrapper<Article> qw = new QueryWrapper<>();
+        if (type.equals("title")){
+            qw.like("TITLE",regex);
+        }else {
+            qw.like("ARTICLE",regex);
+        }
+        qw.orderByAsc("TIME_CREATED");
+        return articleMapper.selectPage(page,qw);
     }
 
 }
