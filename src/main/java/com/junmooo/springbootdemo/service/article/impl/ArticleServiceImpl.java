@@ -101,12 +101,14 @@ public class ArticleServiceImpl implements ArticleService {
     public IPage<Article> search(String type, String regex,int curr,int size) throws Exception {
         IPage<Article> page = new Page<>(curr,size);
         QueryWrapper<Article> qw = new QueryWrapper<>();
+        qw.eq("TYPE","01");
+        qw.eq("DELETE_FLAG","01");
         if (type.equals("title")){
             qw.like("TITLE",regex);
         }else {
             qw.like("ARTICLE",regex);
         }
-        qw.orderByAsc("TIME_CREATED");
+        qw.orderByDesc("TIME_CREATED");
         return articleMapper.selectPage(page,qw);
     }
 
