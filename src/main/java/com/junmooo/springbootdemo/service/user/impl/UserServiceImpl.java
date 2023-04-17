@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
         user.setId(UUID.randomUUID().toString());
         user.setTimeCreated(System.currentTimeMillis());
         if (userMapper.insert(user) == 1) {
-            ArticleTree tree = ArticleTree.builder().tree(defaultTree).timeCreated(System.currentTimeMillis()).ownerId(user.getId()).build();
+            ArticleTree tree = ArticleTree.builder().tree(defaultTree).id(UUID.randomUUID().toString()).timeCreated(System.currentTimeMillis()).ownerId(user.getId()).build();
             treeMapper.insert(tree);
             return user;
         }

@@ -35,6 +35,6 @@ env:
 #    dir-path: "/Users/junmooo/files/"
     dir-path: "/root/home/files/imgs/"
     basket: "http://124.222.27.22/imgs/"
-    default-tree: "[{\"title\":\"READ ME\",\"key\":\"7166e51d-cc2f-4b01-9269-dfc74267fb28\"},{\"title\":\"MarkDown语法\",\"key\":\"07d6b466-38cc-4465-867a-63298e75d1ae\"}]"
+    default-tree: "[{\"title\":\"READ ME\",\"key\":\"7166e51d-cc2f-4b01-9269-dfc74267fb28\"},{\"key\":\"e3b3c901-83f2-4ea1-992c-1bba91d8441c\",\"title\":\"分组\",\"children\":[{\"title\":\"MarkDown语法\",\"key\":\"07d6b466-38cc-4465-867a-63298e75d1ae\"}]},{\"key\":\"2c69fb37-1564-4ebb-8818-361bdb108418\",\"title\":\"分组二\",\"children\":[{\"key\":\"82341419-011a-48b5-bf11-9d6f98cc40d1\",\"title\":\"Git\"}]}]"
 server:
     port: 8088
