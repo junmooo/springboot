@@ -1,0 +1,44 @@
+spring:
+  #  数据库配置
+  datasource:
+    username: root
+    password: Gqb2275237.
+    #        password: 123456
+    url: jdbc:mysql://124.222.27.22:3306/qingbing?useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    #   下面的内容是额外配置，如果不需要直接删除就行 不用配
+    #   换阿里的druid连接池
+    type: com.alibaba.druid.pool.DruidDataSource
+    #    配置druid
+    druid:
+      max-active: 20
+      initial-size: 5
+      min-idle: 10
+      max-wait: 60000
+  # servlet
+  servlet:
+    multipart:
+      max-file-size: 20MB
+      max-request-size: 200MB
+  #redis
+  redis:
+    host: 124.222.27.22
+    port: 6371
+    password: 2275237
+#配置日志
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+#自定义变量
+env:
+  #    dir-path: "/Users/junmooo/files/"
+  dir-path: "/root/home/files/imgs/"
+  basket: "https://qingbing.top/imgs/"
+  photo-dir-path: "/root/home/files/photo/"
+  photo-basket: "https://qingbing.top/photo/"
+  store-dir-path: "/root/home/files/store/"
+  store-basket: "https://qingbing.top/store/"
+  default-tree: "[{\"title\":\"READ ME\",\"key\":\"7166e51d-cc2f-4b01-9269-dfc74267fb28\"},{\"title\":\"MarkDown语法\",\"key\":\"07d6b466-38cc-4465-867a-63298e75d1ae\"}]"
+server:
+  port: 8088
