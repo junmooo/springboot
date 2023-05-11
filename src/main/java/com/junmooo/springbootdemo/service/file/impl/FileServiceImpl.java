@@ -25,6 +25,11 @@ public class FileServiceImpl implements FileService {
     @Value("${env.basket}")
     private String BASKET;
 
+    @Value("${env.store-dir-path}")
+    private String STORE_PATH;
+    @Value("${env.store-basket}")
+    private String STORE_BASKET;
+
     private static final String[] SUFFIXES = {"jpg", "jpeg", "png", "gif"};
 
     @Autowired
@@ -76,4 +81,26 @@ public class FileServiceImpl implements FileService {
         return res;
     }
 
+    @Override
+    public int store(MultipartFile file) throws IOException {
+        File dir = new File(STORE_PATH);
+        if (!dir.isDirectory()) {//文件目录不存在，就创建一个
+            FileUtils.forceMkdir(dir);
+        }
+
+        //2，实现上传
+        FileUtils.copyInputStreamToFile(file.getInputStream(), new File(dir.getAbsolutePath() + "/" + file.getOriginalFilename()));
+        return 1;
+    }
+
+    @Override
+    public int del(String fileName) throws IOException {
+        File file = new File(STORE_PATH+fileName);
+        if (!file.isFile()) {
+            throw new RuntimeException("文件不存在！");
+        }
+        //2，实现删除
+        FileUtils.delete(file);
+        return 1;
+    }
 }

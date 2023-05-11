@@ -10,4 +10,8 @@ public interface FileService {
     FileEntity save(MultipartFile uploadFile, String operId) throws IOException;
 
     JSONArray saveAll(MultipartFile[] files, String token) throws IOException;
+
+    int store(MultipartFile file) throws IOException;
+
+    int del(String fileName) throws IOException;
 }

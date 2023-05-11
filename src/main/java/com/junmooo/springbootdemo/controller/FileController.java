@@ -34,7 +34,7 @@ public class FileController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        
+
         try {
             return CommonResponse.success(fileService.save(file, token));
         } catch (Exception e) {
@@ -61,6 +61,26 @@ public class FileController {
             e.printStackTrace();
         }
         return CommonResponse.fail(ErrorCode.SYSERR, "上传失败");
+    }
+
+    @PostMapping("/store")
+    public JSONObject uploads(MultipartFile file) {
+        try {
+            return CommonResponse.success(fileService.store(file));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return CommonResponse.fail(ErrorCode.SYSERR, "上传失败");
+    }
+
+    @PostMapping("/delStore")
+    public JSONObject del(String fileName) {
+        try {
+            return CommonResponse.success(fileService.del(fileName));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return CommonResponse.fail(ErrorCode.SYSERR, "删除失败");
     }
 
 }
