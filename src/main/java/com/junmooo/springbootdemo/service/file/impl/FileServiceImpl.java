@@ -103,4 +103,18 @@ public class FileServiceImpl implements FileService {
         FileUtils.delete(file);
         return 1;
     }
+
+    @Override
+    public JSONArray listStore() throws IOException {
+        File dir = new File(STORE_PATH);
+        if (!dir.isDirectory()) {//文件目录不存在，就创建一个
+            FileUtils.forceMkdir(dir);
+        }
+        File[] files = dir.listFiles();
+        JSONArray json = new JSONArray();
+        for (int i = 0; i < files.length; i++) {
+            json.add(files[i].getName());
+        }
+        return json;
+    }
 }

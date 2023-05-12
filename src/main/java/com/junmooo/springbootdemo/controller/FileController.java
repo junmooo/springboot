@@ -73,6 +73,16 @@ public class FileController {
         return CommonResponse.fail(ErrorCode.SYSERR, "上传失败");
     }
 
+    @PostMapping("/listStore")
+    public JSONObject listStore() {
+        try {
+            return CommonResponse.success(fileService.listStore());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return CommonResponse.fail(ErrorCode.SYSERR, "上传失败");
+    }
+
     @PostMapping("/delStore")
     public JSONObject del(String fileName) {
         try {

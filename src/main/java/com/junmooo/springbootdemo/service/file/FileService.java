@@ -14,4 +14,6 @@ public interface FileService {
     int store(MultipartFile file) throws IOException;
 
     int del(String fileName) throws IOException;
+
+    JSONArray listStore() throws IOException;
 }
