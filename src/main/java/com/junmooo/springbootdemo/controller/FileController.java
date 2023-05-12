@@ -7,10 +7,7 @@ import com.junmooo.springbootdemo.entity.vo.CommonResponse;
 import com.junmooo.springbootdemo.service.file.FileService;
 import com.junmooo.springbootdemo.utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 
@@ -73,7 +70,7 @@ public class FileController {
         return CommonResponse.fail(ErrorCode.SYSERR, "上传失败");
     }
 
-    @PostMapping("/listStore")
+    @GetMapping("/listStore")
     public JSONObject listStore() {
         try {
             return CommonResponse.success(fileService.listStore());
@@ -83,7 +80,7 @@ public class FileController {
         return CommonResponse.fail(ErrorCode.SYSERR, "上传失败");
     }
 
-    @PostMapping("/delStore")
+    @GetMapping("/delStore")
     public JSONObject del(String fileName) {
         try {
             return CommonResponse.success(fileService.del(fileName));
