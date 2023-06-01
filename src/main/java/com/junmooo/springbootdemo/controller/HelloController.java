@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Random;
+
 @RestController
 @RequestMapping("/hello")
 @CrossOrigin(origins = "*")
@@ -30,6 +32,12 @@ public class HelloController {
         System.out.println(RedisUtils.hget(key1, "school"));
         res.put("code", 200);
         res.put("msg", "success");
+        int sleep = new Random().nextInt(200);
+        try {
+            Thread.sleep(sleep);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         res.put("data",var);
         return res;
     }

@@ -2,6 +2,7 @@ package com.junmooo.springbootdemo.config;
 
 import com.junmooo.springbootdemo.interceptor.AdminInterceptor;
 import com.junmooo.springbootdemo.interceptor.ClientInterceptor;
+import com.junmooo.springbootdemo.interceptor.PrometheusInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -15,6 +16,9 @@ public class InterceptorConfig implements WebMvcConfigurer {
 
     @Autowired
     ClientInterceptor clientInterceptor;
+
+    @Autowired
+    PrometheusInterceptor prometheusInterceptor;
     /**
      * 添加Web项目的拦截器
      */
@@ -25,6 +29,6 @@ public class InterceptorConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/", "/auth/login", "/auth/register", "/auth/getName","/album/queryAll");
         //放行登录页，登陆操作，静态资源
         registry.addInterceptor(clientInterceptor).addPathPatterns("/message/**");
-
+        registry.addInterceptor(prometheusInterceptor).addPathPatterns("/**");
     }
 }
