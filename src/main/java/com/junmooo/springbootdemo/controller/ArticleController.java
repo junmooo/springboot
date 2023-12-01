@@ -6,6 +6,7 @@ import com.junmooo.springbootdemo.entity.atical.ArticleTree;
 import com.junmooo.springbootdemo.entity.token.UserToken;
 import com.junmooo.springbootdemo.entity.vo.CommonResponse;
 import com.junmooo.springbootdemo.service.article.ArticleService;
+import com.junmooo.springbootdemo.utils.TokenUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +22,13 @@ public class ArticleController {
     @PostMapping("/save")
     public JSONObject save(@RequestBody Article article, HttpServletRequest request) {
         UserToken userToken = (UserToken) request.getAttribute("userToken");
+        if (userToken == null){
+            try {
+                userToken = TokenUtils.getInfoFromUserToken(request.getHeader("token"));
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+        }
         try {
             return CommonResponse.success(articleService.save(article, userToken));
         } catch (Exception e) {

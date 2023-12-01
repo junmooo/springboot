@@ -61,7 +61,7 @@ public class ArticleServiceImpl implements ArticleService {
             article.setId(UUID.randomUUID().toString());
             if (StringUtils.isEmpty(article.getAuthorId())) article.setAuthorId(author.getId());
             if (StringUtils.isEmpty(article.getAuthorName())) article.setAuthorName(author.getName());
-            if (StringUtils.isEmpty(article.getAuthorAvatar())) article.setAuthorName(author.getAvatar());
+            if (StringUtils.isEmpty(article.getAuthorAvatar())) article.setAuthorAvatar(author.getAvatar());
             article.setTimeCreated(System.currentTimeMillis());
             article.setType("00");
             if (articleMapper.insert(article) == 1) {
