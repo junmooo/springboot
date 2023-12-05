@@ -25,6 +25,12 @@ spring:
     host: 124.222.27.22
     port: 6371
     password: 2275237
+
+  rabbitmq:
+    host: junmooo.x3322.net
+    port: 5672
+    username: guest
+    password: guest
 #配置日志
 mybatis-plus:
   configuration:
