@@ -31,6 +31,22 @@ spring:
     port: 5672
     username: guest
     password: guest
+    # 消息发送确认
+    publisher-confirm-type: correlated
+    # 开启发送失败退回
+    publisher-returns: true
+    listener:
+      simple:
+        # 消费端最小并发数
+        concurrency: 1
+        # 消费端最大并发数
+        max-concurrency: 100
+        # 一次请求中预处理的消息数量
+        prefetch: 100
+        # 手动应答
+        acknowledge-mode: manual
+
+
 #配置日志
 mybatis-plus:
   configuration:
@@ -61,4 +77,4 @@ env:
   store-basket: "https://qingbing.top/store/"
   default-tree: "[{\"title\":\"READ ME\",\"key\":\"7166e51d-cc2f-4b01-9269-dfc74267fb28\"},{\"title\":\"MarkDown语法\",\"key\":\"07d6b466-38cc-4465-867a-63298e75d1ae\"}]"
 server:
-  port: 8088
+  port: 8089

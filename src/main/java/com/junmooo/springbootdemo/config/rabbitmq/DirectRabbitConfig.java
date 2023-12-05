@@ -1,11 +1,17 @@
 package com.junmooo.springbootdemo.config.rabbitmq;
 
+import javax.annotation.Resource;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
+import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 
 
 /**
@@ -18,9 +24,31 @@ import org.springframework.context.annotation.Configuration;
  * @copyright Copyright(c) 2011-2020, Gopay All Rights Reserved.
  * @date 2023/12/5 11:27
  */
-@Configuration
-public class DirectRabbitConfig {
+//@Configuration
+public class DirectRabbitConfig implements BeanPostProcessor {
+
+    //这是创建交换机和队列用的rabbitAdmin对象
+    @Resource
+    private RabbitAdmin rabbitAdmin;
+    //初始化rabbitAdmin对象
     @Bean
+    public RabbitAdmin rabbitAdmin(ConnectionFactory connectionFactory) {
+        RabbitAdmin rabbitAdmin = new RabbitAdmin(connectionFactory);
+        // 只有设置为 true，spring 才会加载 RabbitAdmin 这个类
+        rabbitAdmin.setAutoStartup(true);
+        return rabbitAdmin;
+    }
+
+    //实例化bean后，也就是Bean的后置处理器
+    @Override
+    public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
+        //创建交换机
+        rabbitAdmin.declareExchange(rabbitmqDemoDirectExchange());
+        //创建队列
+        rabbitAdmin.declareQueue(rabbitmqDemoDirectQueue());
+        return null;
+    }
+
     public Queue rabbitmqDemoDirectQueue() {
         /**
          * 1、name:    队列名称
@@ -31,7 +59,6 @@ public class DirectRabbitConfig {
         return new Queue(RabbitMQConfig.RABBITMQ_DEMO_TOPIC, true, false, false);
     }
 
-    @Bean
     public DirectExchange rabbitmqDemoDirectExchange() {
         //Direct交换机
         return new DirectExchange(RabbitMQConfig.RABBITMQ_DEMO_DIRECT_EXCHANGE, true, false);

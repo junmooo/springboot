@@ -61,4 +61,4 @@ env:
   store-basket: "https://qingbing.top/store/"
   default-tree: "[{\"title\":\"READ ME\",\"key\":\"7166e51d-cc2f-4b01-9269-dfc74267fb28\"},{\"title\":\"MarkDown语法\",\"key\":\"07d6b466-38cc-4465-867a-63298e75d1ae\"}]"
 server:
-  port: 8088
+  port: 8089
