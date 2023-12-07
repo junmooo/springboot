@@ -42,7 +42,7 @@ public class ResourceServiceImpl implements ResourceService {
         });
 
         getTreeNode(in, out);
-        System.out.println(out);
+        logger.info(out);
         return out;
     }
 

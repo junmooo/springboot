@@ -54,12 +54,12 @@ public class AdminInterceptor implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
-        System.out.println("postHandle");
+        logger.info("postHandle");
     }
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)  {
         //只要对应的preHandle放行了就一定会执行，Controller方法抛异常也不会影响
-        System.out.println("afterCompletion");
+        logger.info("afterCompletion");
     }
 }

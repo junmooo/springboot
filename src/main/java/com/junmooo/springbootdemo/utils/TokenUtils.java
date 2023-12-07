@@ -130,6 +130,6 @@ public class TokenUtils {
 //        OperToken userToken = new OperToken("1", "junmo", "超级管理员名称");
 //        String token = generateOperToken(userToken, 60);
         UserToken infoFromToken = getInfoFromUserToken("eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJqdW5tb29vIiwiSUQiOiI0NDdmODM4Yy0yYzkwLTQ4NTMtOGVjMy0zMGJkN2E2OTk4YWMiLCJOQU1FIjoianVubW9vbyIsIkVNQUlMIjoicWluZ2JndW9AcGF5cGFsLmNvbSIsIkFWQVRBUiI6bnVsbCwiZXhwIjoxNjc3NDY1NDM1fQ.9bU3x3wpwhzVcww1YdQOmi7Xr75_S_6rrs9XUB9BjxU");
-        System.out.println(infoFromToken);
+        logger.info(infoFromToken);
     }
 }

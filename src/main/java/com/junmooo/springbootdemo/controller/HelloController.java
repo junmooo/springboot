@@ -27,9 +27,9 @@ public class HelloController {
         RedisUtils.hset(key1,"name","walker");
         RedisUtils.hset(key1,"age","18");
         RedisUtils.hset(key1,"school","广药");
-        System.out.println(RedisUtils.hget(key1, "name"));
-        System.out.println(RedisUtils.hget(key1, "age"));
-        System.out.println(RedisUtils.hget(key1, "school"));
+        logger.info(RedisUtils.hget(key1, "name"));
+        logger.info(RedisUtils.hget(key1, "age"));
+        logger.info(RedisUtils.hget(key1, "school"));
         res.put("code", 200);
         res.put("msg", "success");
         int sleep = new Random().nextInt(200);

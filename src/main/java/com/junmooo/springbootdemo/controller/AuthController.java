@@ -56,7 +56,7 @@ public class AuthController {
             e.printStackTrace();
             return CommonResponse.fail(ErrorCode.WRONGTOKEN, "token 失效");
         } catch (Exception e) {
-            System.out.println(e);
+            logger.info(e);
             return CommonResponse.fail(ErrorCode.SQLERR, "登陆异常");
         }
     }

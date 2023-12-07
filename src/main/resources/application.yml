@@ -45,7 +45,18 @@ spring:
         prefetch: 100
         # 手动应答
         acknowledge-mode: manual
-
+        retry:
+          ### 开启重试机制(调用监听方法失败时会重试，不是从队列中重复拿消息)
+          enabled: true
+          #最大重试传递次数
+          max-attempts: 3
+          #第一次和第二次尝试传递消息的间隔时间 单位毫秒
+          initial-interval: 5000ms
+          #最大重试时间间隔，单位毫秒
+          max-interval: 300000ms
+          #应用前一次重试间隔的乘法器，multiplier默认为1
+          multiplier: 3
+          #以上配置的间隔0s  5s  15s  45s
 
 #配置日志
 mybatis-plus:
